@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  postgre-local:
+    image: postgres
+    container_name: postgre-local
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "local"
+    volumes:
+      - "/Users/byungdonyoon/database/postgresql/data:/var/lib/postgresql/data"
