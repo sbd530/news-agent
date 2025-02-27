@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import { In, Repository } from 'typeorm';
 import { HackerNews } from './hackernews.entity';
 import axios from 'axios';
@@ -15,32 +14,49 @@ export class ArticlesService {
     private hackerNewsRepository: Repository<HackerNews>,
   ) {}
 
-  // TODO: logging file
-  @Cron(CronExpression.EVERY_5_MINUTES)
-  async filterByLLM(): Promise<void> {
+  async filterByLLM(): Promise<HackerNews | null> {
     const hackerNews = await this.hackerNewsRepository.findOne({
       where: { checked: false },
       order: { id: 'ASC' },
     });
     if (!hackerNews) {
       this.logger.log('No hackerNews.');
-      return;
+      return null;
     }
 
     const url = hackerNews.url;
     if (!url) {
       this.logger.warn('No url.');
-      return;
+      await this.checkHackerNews(hackerNews);
+      return null;
     }
 
-    const { data: document } = await axios.get<string>(url);
+    this.logger.log(`GET ${url}`);
+    let document: string;
+    try {
+      const response = await axios.get<string>(url, {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+          Accept:
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+      });
+      document = response.data;
+    } catch (error) {
+      this.logger.error('Failed to fetch document', error);
+      await this.checkHackerNews(hackerNews);
+      return null;
+    }
 
     const graphResponse = await hackerNewsGraph.invoke({
       document: document,
     });
     if (!graphResponse.isAiRelated) {
       this.logger.log('Not related to AI.');
-      return;
+      await this.checkHackerNews(hackerNews);
+      return null;
     }
 
     // Send discord
@@ -51,11 +67,15 @@ export class ArticlesService {
       content: url,
     });
 
+    await this.checkHackerNews(hackerNews);
+    return hackerNews;
+  }
+
+  async checkHackerNews(hackerNews: HackerNews) {
     hackerNews.checked = true;
     await this.hackerNewsRepository.save(hackerNews);
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
   async crawlHackerNews(): Promise<void> {
     this.logger.log('Crawling Hacker News...');
 
