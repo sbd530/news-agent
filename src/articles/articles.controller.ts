@@ -12,6 +12,12 @@ export class ArticlesController {
 
   @Post('hacker-news/crawl')
   async crawlHackerNews() {
-    return this.articlesService.crawlHackerNews();
+    await this.articlesService.crawlHackerNews();
+    return 'OK';
+  }
+
+  @Post('geek-news/crawl')
+  async crawlGeekNews() {
+    return await this.articlesService.crawlGeekNews();
   }
 }

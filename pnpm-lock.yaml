@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@langchain/community':
         specifier: ^0.3.27
-        version: 0.3.32(@browserbasehq/sdk@2.3.0)(@browserbasehq/stagehand@1.13.1(@playwright/test@1.50.1)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(zod@3.24.2))(@ibm-cloud/watsonx-ai@1.5.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2)))(@langchain/ollama@0.2.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(axios@1.7.9)(cheerio@1.0.0)(ibm-cloud-sdk-core@5.1.3)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(pg@8.13.3)(playwright@1.50.1)(typeorm@0.3.20(pg@8.13.3)(ts-node@10.9.2(@swc/core@1.10.18)(@types/node@22.13.5)(typescript@5.7.3)))(ws@8.18.1)
+        version: 0.3.32(@browserbasehq/sdk@2.3.0)(@browserbasehq/stagehand@1.13.1(@playwright/test@1.50.1)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(zod@3.24.2))(@ibm-cloud/watsonx-ai@1.5.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2)))(@langchain/ollama@0.2.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(axios@1.7.9)(cheerio@1.0.0)(fast-xml-parser@5.0.8)(ibm-cloud-sdk-core@5.1.3)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(pg@8.13.3)(playwright@1.50.1)(typeorm@0.3.20(pg@8.13.3)(ts-node@10.9.2(@swc/core@1.10.18)(@types/node@22.13.5)(typescript@5.7.3)))(ws@8.18.1)
       '@langchain/core':
         specifier: ^0.3.37
         version: 0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))
@@ -56,6 +56,9 @@ importers:
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
+      fast-xml-parser:
+        specifier: ^5.0.8
+        version: 5.0.8
       langchain:
         specifier: ^0.3.14
         version: 0.3.19(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2)))(@langchain/ollama@0.2.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(axios@1.7.9)(cheerio@1.0.0)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(typeorm@0.3.20(pg@8.13.3)(ts-node@10.9.2(@swc/core@1.10.18)(@types/node@22.13.5)(typescript@5.7.3)))(ws@8.18.1)
@@ -2488,6 +2491,10 @@ packages:
   fast-uri@3.0.6:
     resolution: {integrity: sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==}
 
+  fast-xml-parser@5.0.8:
+    resolution: {integrity: sha512-qY8NiI5L8ff00F2giyICiJxSSKHO52tC36LJqx2JtvGyAd5ZfehC/l4iUVVHpmpIa6sM9N5mneSLHQG2INGoHA==}
+    hasBin: true
+
   fastq@1.19.0:
     resolution: {integrity: sha512-7SFSRCNjBQIZH/xZR3iy5iQYR8aGBE0h3VG6/cwlbrpdciNYBMotQav8c1XI3HjHH+NikUpP53nPdlZSdWmFzA==}
 
@@ -4053,6 +4060,9 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
+  strnum@2.0.5:
+    resolution: {integrity: sha512-YAT3K/sgpCUxhxNMrrdhtod3jckkpYwH6JAuwmUdXZsmzH1wUyzTMrrK2wYCEEqlKwrWDd35NeuUkbBy/1iK+Q==}
+
   strtok3@6.3.0:
     resolution: {integrity: sha512-fZtbhtvI9I48xDSywd/somNqgUHl2L2cstmXCCif0itOf96jeW18MBSyrLuNicYQVkvpOxkZtkzujiTJ9LW5Jw==}
     engines: {node: '>=10'}
@@ -5227,7 +5237,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@langchain/community@0.3.32(@browserbasehq/sdk@2.3.0)(@browserbasehq/stagehand@1.13.1(@playwright/test@1.50.1)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(zod@3.24.2))(@ibm-cloud/watsonx-ai@1.5.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2)))(@langchain/ollama@0.2.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(axios@1.7.9)(cheerio@1.0.0)(ibm-cloud-sdk-core@5.1.3)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(pg@8.13.3)(playwright@1.50.1)(typeorm@0.3.20(pg@8.13.3)(ts-node@10.9.2(@swc/core@1.10.18)(@types/node@22.13.5)(typescript@5.7.3)))(ws@8.18.1)':
+  '@langchain/community@0.3.32(@browserbasehq/sdk@2.3.0)(@browserbasehq/stagehand@1.13.1(@playwright/test@1.50.1)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(zod@3.24.2))(@ibm-cloud/watsonx-ai@1.5.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2)))(@langchain/ollama@0.2.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2))))(axios@1.7.9)(cheerio@1.0.0)(fast-xml-parser@5.0.8)(ibm-cloud-sdk-core@5.1.3)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(pg@8.13.3)(playwright@1.50.1)(typeorm@0.3.20(pg@8.13.3)(ts-node@10.9.2(@swc/core@1.10.18)(@types/node@22.13.5)(typescript@5.7.3)))(ws@8.18.1)':
     dependencies:
       '@browserbasehq/stagehand': 1.13.1(@playwright/test@1.50.1)(deepmerge@4.3.1)(dotenv@16.4.7)(openai@4.85.4(ws@8.18.1)(zod@3.24.2))(zod@3.24.2)
       '@ibm-cloud/watsonx-ai': 1.5.0(@langchain/core@0.3.40(openai@4.85.4(ws@8.18.1)(zod@3.24.2)))
@@ -5247,6 +5257,7 @@ snapshots:
     optionalDependencies:
       '@browserbasehq/sdk': 2.3.0
       cheerio: 1.0.0
+      fast-xml-parser: 5.0.8
       ignore: 5.3.2
       jsonwebtoken: 9.0.2
       lodash: 4.17.21
@@ -6865,6 +6876,10 @@ snapshots:
   fast-safe-stringify@2.1.1: {}
 
   fast-uri@3.0.6: {}
+
+  fast-xml-parser@5.0.8:
+    dependencies:
+      strnum: 2.0.5
 
   fastq@1.19.0:
     dependencies:
@@ -8540,6 +8555,8 @@ snapshots:
   strip-final-newline@2.0.0: {}
 
   strip-json-comments@3.1.1: {}
+
+  strnum@2.0.5: {}
 
   strtok3@6.3.0:
     dependencies:

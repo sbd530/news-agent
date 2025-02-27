@@ -8,3 +8,11 @@ CREATE TABLE hacker_news
     created_at TIMESTAMP  NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP  NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE geek_news
+(
+    id         SERIAL PRIMARY KEY,
+    url        TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP   NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP   NOT NULL DEFAULT NOW()
+);

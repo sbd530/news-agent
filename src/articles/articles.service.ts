@@ -4,6 +4,8 @@ import { In, Repository } from 'typeorm';
 import { HackerNews } from './hackernews.entity';
 import axios from 'axios';
 import { hackerNewsGraph } from './llm/hackernews.graph';
+import { XMLParser } from 'fast-xml-parser';
+import { GeekNews } from './geeknews.entity';
 
 @Injectable()
 export class ArticlesService {
@@ -12,6 +14,8 @@ export class ArticlesService {
   constructor(
     @InjectRepository(HackerNews)
     private hackerNewsRepository: Repository<HackerNews>,
+    @InjectRepository(GeekNews)
+    private geekNewsRepository: Repository<GeekNews>,
   ) {}
 
   async filterByLLM(): Promise<HackerNews | null> {
@@ -59,7 +63,6 @@ export class ArticlesService {
       return null;
     }
 
-    // Send discord
     this.logger.log(`Send URL ${url}`);
     const discordWebhookUrl =
       'https://discord.com/api/webhooks/1344180063326699640/tvOZk3ztkcbrVaLom0W9xB7DbCeaK-ThroJ1YhcIkEKe6VlGdvDOfjAzbGHkwcXWyCiI';
@@ -79,7 +82,6 @@ export class ArticlesService {
   async crawlHackerNews(): Promise<void> {
     this.logger.log('Crawling Hacker News...');
 
-    // 1. Fetch the list of new article IDs
     const { data: articleIds } = await axios.get<number[]>(
       'https://hacker-news.firebaseio.com/v0/newstories.json',
     );
@@ -89,7 +91,6 @@ export class ArticlesService {
       return;
     }
 
-    // 2. Get existing articles from the database
     const existingArticles = await this.hackerNewsRepository.find({
       select: ['articleId'],
       where: { articleId: In(articleIds) },
@@ -99,7 +100,6 @@ export class ArticlesService {
       existingArticles.map((a) => a.articleId),
     );
 
-    // 3. Filter out already stored articles
     const newArticleIds = articleIds
       .filter((id) => !existingArticleIds.has(id))
       .slice(0, 20);
@@ -111,7 +111,6 @@ export class ArticlesService {
 
     this.logger.log(`Found ${newArticleIds.length} new articles.`);
 
-    // 4. Fetch details of new articles and insert into DB
     const newArticles = await Promise.all(
       newArticleIds.map(async (articleId) => {
         const { data: article } = await axios.get<{
@@ -129,5 +128,58 @@ export class ArticlesService {
 
     await this.hackerNewsRepository.save(newArticles);
     this.logger.log(`Inserted ${newArticles.length} new articles.`);
+  }
+
+  async crawlGeekNews(): Promise<void> {
+    const urls = await this.fetchRssEntryIds();
+
+    const existingArticles = await this.geekNewsRepository.find({
+      where: { url: In(urls) },
+    });
+
+    const existingUrls = new Set(existingArticles.map((a) => a.url));
+
+    const newUrls = urls.filter((id) => !existingUrls.has(id)).slice(0, 5);
+
+    if (newUrls.length === 0) {
+      this.logger.log('No new url to insert.');
+      return;
+    }
+
+    this.logger.log(`Found ${newUrls.length} new articles.`);
+
+    const geekNewsList = newUrls.map((url) =>
+      this.geekNewsRepository.create({ url }),
+    );
+    await this.geekNewsRepository.save(geekNewsList);
+
+    for (const url of newUrls) {
+      this.logger.log(`Send URL ${url}`);
+      const discordWebhookUrl =
+        'https://discord.com/api/webhooks/1344563892172357642/kdZMXTlWnqFALLxkkBdfUODfZNFp7oMwc-z6EGbNbzeqBfs05Z_xkwCiRolv9F7XYzby';
+      await axios.post(discordWebhookUrl, { content: url });
+    }
+  }
+
+  async fetchRssEntryIds(): Promise<string[]> {
+    try {
+      const { data: xmlData } = await axios.get<string>(
+        'https://news.hada.io/rss/news',
+      );
+
+      const parser = new XMLParser({
+        ignoreAttributes: false,
+        attributeNamePrefix: '',
+      });
+
+      const xml = parser.parse(xmlData) as {
+        feed?: { entry?: { id: string }[] };
+      };
+
+      return xml.feed?.entry?.map((entry) => entry.id) || [];
+    } catch (error) {
+      console.error('Error fetching RSS feed:', error);
+      return [];
+    }
   }
 }

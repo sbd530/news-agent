@@ -12,7 +12,12 @@ export class ArticlesCron {
   }
 
   @Cron(CronExpression.EVERY_HOUR)
-  async crawlHackerNews(): Promise<void> {
+  async cronCrawlHackerNews(): Promise<void> {
     await this.articlesService.crawlHackerNews();
+  }
+
+  @Cron(CronExpression.EVERY_HOUR)
+  async cronCrawlGeekNews(): Promise<void> {
+    await this.articlesService.crawlGeekNews();
   }
 }
